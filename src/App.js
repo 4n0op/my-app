@@ -1,161 +1,192 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import "./App.css";
 
-const GameForm = () => {
+const App = () => {
   const { register, handleSubmit } = useForm();
-  const [level1, setLevel1] = useState(0);
-  const [level2, setLevel2] = useState(0);
-  const [level3, setLevel3] = useState(0);
-  const [level4, setLevel4] = useState(0);
-  const [algaeProcessed, setAlgaeProcessed] = useState(0);
-  const [algaeNetted, setAlgaeNetted] = useState(0);
+  const [autoCoralScores, setAutoCoralScores] = useState([0, 0, 0, 0]);
+  const [teleopCoralScores, setTeleopCoralScores] = useState([0, 0, 0, 0]);
+  const [autoAlgae, setAutoAlgae] = useState(0);
+  const [teleopAlgae, setTeleopAlgae] = useState(0);
+  const [autoShooting, setAutoShooting] = useState(0);
+  const [teleopShooting, setTeleopShooting] = useState(0);
+
+  const handleIncrement = (scores, setScores, index) => {
+    const newScores = [...scores];
+    newScores[index]++;
+    setScores(newScores);
+  };
+
+  const handleDecrement = (scores, setScores, index) => {
+    const newScores = [...scores];
+    if (newScores[index] > 0) {
+      newScores[index]--;
+    }
+    setScores(newScores);
+  };
 
   const onSubmit = (data) => {
     console.log({
       ...data,
-      scores: {
-        level1,
-        level2,
-        level3,
-        level4,
-        algaeProcessed,
-        algaeNetted,
-      },
+      autoCoralScores,
+      teleopCoralScores,
+      autoAlgae,
+      teleopAlgae,
+      autoShooting,
+      teleopShooting,
     });
   };
 
-  const adjustScore = (currentValue, setValue, adjustment) => {
-    const newValue = currentValue + adjustment;
-    setValue(Math.max(newValue, 0)); // Prevents negative numbers
-  };
-
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <h2>Match Details</h2>
-      <label>
-        Match Number:
-        <input {...register("matchNumber")} type="number" />
-      </label>
-      <label>
-        Team Number:
-        <input {...register("teamNumber")} type="number" />
-      </label>
-
-      <h2>Auto</h2>
-      <label>
-        Left black line:
-        <input {...register("auto.leftBlackLine")} type="checkbox" />
-      </label>
-
-      <div>
-        <label>Level 1:</label>
-        <button
-          type="button"
-          onClick={() => adjustScore(level1, setLevel1, -1)}
-        >
-          -
-        </button>
-        <span>{level1}</span>
-        <button
-          type="button"
-          onClick={() => adjustScore(level1, setLevel1, 1)}
-        >
-          +
-        </button>
-      </div>
-
-      <div>
-        <label>Level 2:</label>
-        <button
-          type="button"
-          onClick={() => adjustScore(level2, setLevel2, -1)}
-        >
-          -
-        </button>
-        <span>{level2}</span>
-        <button
-          type="button"
-          onClick={() => adjustScore(level2, setLevel2, 1)}
-        >
-          +
-        </button>
-      </div>
-
-      <div>
-        <label>Level 3:</label>
-        <button
-          type="button"
-          onClick={() => adjustScore(level3, setLevel3, -1)}
-        >
-          -
-        </button>
-        <span>{level3}</span>
-        <button
-          type="button"
-          onClick={() => adjustScore(level3, setLevel3, 1)}
-        >
-          +
-        </button>
-      </div>
-
-      <div>
-        <label>Level 4:</label>
-        <button
-          type="button"
-          onClick={() => adjustScore(level4, setLevel4, -1)}
-        >
-          -
-        </button>
-        <span>{level4}</span>
-        <button
-          type="button"
-          onClick={() => adjustScore(level4, setLevel4, 1)}
-        >
-          +
-        </button>
-      </div>
-
-      <div>
+    <div className="app">
+      <h1>Game Scoring App</h1>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <h2>Match Details</h2>
         <label>
-          Algae processed:
-          <button
-            type="button"
-            onClick={() => adjustScore(algaeProcessed, setAlgaeProcessed, -1)}
-          >
-            -
-          </button>
-          <span>{algaeProcessed}</span>
-          <button
-            type="button"
-            onClick={() => adjustScore(algaeProcessed, setAlgaeProcessed, 1)}
-          >
-            +
-          </button>
+          Match Number:
+          <input {...register("matchNumber")} type="number" />
         </label>
-      </div>
-
-      <div>
         <label>
-          Algae Netted:
-          <button
-            type="button"
-            onClick={() => adjustScore(algaeNetted, setAlgaeNetted, -1)}
-          >
-            -
-          </button>
-          <span>{algaeNetted}</span>
-          <button
-            type="button"
-            onClick={() => adjustScore(algaeNetted, setAlgaeNetted, 1)}
-          >
-            +
-          </button>
+          Team Number:
+          <input {...register("teamNumber")} type="number" />
         </label>
-      </div>
 
-      <button type="submit">Submit</button>
-    </form>
+        <h2>Auto</h2>
+        <label>
+          <input {...register("auto.leftBlackLine")} type="checkbox" />
+          Left black line
+        </label>
+
+        <div>
+          <label>Coral scored per level:</label>
+          {["Level 1", "Level 2", "Level 3", "Level 4"].map((level, index) => (
+            <div key={index} className="score-control">
+              <span>{level}</span>
+              <button
+                type="button"
+                onClick={() =>
+                  handleDecrement(autoCoralScores, setAutoCoralScores, index)
+                }
+              >
+                -
+              </button>
+              <span>{autoCoralScores[index]}</span>
+              <button
+                type="button"
+                onClick={() =>
+                  handleIncrement(autoCoralScores, setAutoCoralScores, index)
+                }
+              >
+                +
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <label>
+            Algae processed:
+            <button type="button" onClick={() => setAutoAlgae(autoAlgae - 1)}>
+              -
+            </button>
+            <span>{autoAlgae}</span>
+            <button type="button" onClick={() => setAutoAlgae(autoAlgae + 1)}>
+              +
+            </button>
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Algae shooting:
+            <button type="button" onClick={() => setAutoShooting(autoShooting - 1)}>
+              -
+            </button>
+            <span>{autoShooting}</span>
+            <button type="button" onClick={() => setAutoShooting(autoShooting + 1)}>
+              +
+            </button>
+          </label>
+        </div>
+
+        <h2>Teleop</h2>
+        <div>
+          <label>Coral scored per level:</label>
+          {["Level 1", "Level 2", "Level 3", "Level 4"].map((level, index) => (
+            <div key={index} className="score-control">
+              <span>{level}</span>
+              <button
+                type="button"
+                onClick={() =>
+                  handleDecrement(teleopCoralScores, setTeleopCoralScores, index)
+                }
+              >
+                -
+              </button>
+              <span>{teleopCoralScores[index]}</span>
+              <button
+                type="button"
+                onClick={() =>
+                  handleIncrement(teleopCoralScores, setTeleopCoralScores, index)
+                }
+              >
+                +
+              </button>
+            </div>
+          ))}
+        </div>
+
+        <div>
+          <label>
+            Algae processed:
+            <button type="button" onClick={() => setTeleopAlgae(teleopAlgae - 1)}>
+              -
+            </button>
+            <span>{teleopAlgae}</span>
+            <button type="button" onClick={() => setTeleopAlgae(teleopAlgae + 1)}>
+              +
+            </button>
+          </label>
+        </div>
+
+        <div>
+          <label>
+            Algae shooting:
+            <button
+              type="button"
+              onClick={() => setTeleopShooting(teleopShooting - 1)}
+            >
+              -
+            </button>
+            <span>{teleopShooting}</span>
+            <button
+              type="button"
+              onClick={() => setTeleopShooting(teleopShooting + 1)}
+            >
+              +
+            </button>
+          </label>
+        </div>
+
+        <h2>Endgame</h2>
+        <label>
+          Cage climb:
+          <select {...register("endgame.cageClimb")}>
+            <option value="shallow">Shallow</option>
+            <option value="deep">Deep</option>
+            <option value="park">Park</option>
+          </select>
+        </label>
+
+        <label>
+          Comments:
+          <textarea {...register("endgame.comments")} placeholder="Type comments here" />
+        </label>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   );
 };
 
-export default GameForm;
+export default App;
