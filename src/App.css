@@ -1,21 +1,174 @@
-.app {
-  font-family: Arial, sans-serif;
-  margin: 20px;
+/* Global Styles */
+body {
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(135deg, #1e1e2f, #141419); /* Sleek dark gradient */
+  color: #f0f0f0;
+  margin: 0;
+  padding: 0;
+  line-height: 1.6;
 }
 
-label {
-  display: block;
-  margin-bottom: 10px;
+/* Typography */
+h1, h2, h3, h4 {
+  font-weight: 700;
+  color: #f8f8fa;
+  margin-bottom: 15px;
 }
 
-.score-control {
+/* Form Container */
+.form-container {
+  max-width: 800px;
+  margin: 50px auto;
+  padding: 40px;
+  background: #24243e; /* Deep modern background */
+  border-radius: 10px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+/* Input Fields and Controls */
+.input-group {
+  margin-bottom: 25px;
+  text-align: left;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 12px;
+  background-color: #1c1c2e; /* Dark input field */
+  border: 1px solid #353552;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #6b5cff;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Buttons */
+button {
+  background-color: #6b5cff; /* Vibrant modern blue */
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #8376ff;
+  box-shadow: 0 4px 10px rgba(107, 92, 255, 0.5);
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+}
+
+/* Level Controls and Algae Controls */
+.level-control, .algae-control {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
 }
 
-button {
-  padding: 5px 10px;
+.level-input, .algae-input {
+  width: 60px;
+  height: 40px;
+  text-align: center;
+  margin: 0;
+  font-size: 1.2rem;
+  background-color: #1c1c2e;
+  color: #fff;
+  border: 1px solid #353552;
+  border-radius: 8px;
+}
+
+.button-decrease, .button-increase {
+  background-color: #353552;
+  color: #fff;
+  font-size: 1.4rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease;
+}
+
+.button-decrease:hover, .button-increase:hover {
+  background-color: #6b5cff;
+  color: white;
+}
+
+/* Section Styles */
+.section {
+  margin-bottom: 40px;
+  border-top: 1px solid #353552;
+  padding-top: 20px;
+}
+
+/* Header */
+.header {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #f0f0f0;
+  text-align: center;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+
+  h2, h3 {
+    font-size: 1.5rem;
+  }
+
+  .level-input, .algae-input {
+    width: 50px;
+    font-size: 1rem;
+  }
+
+  button {
+    font-size: 1rem;
+    padding: 10px 15px;
+  }
+}
+/* Center Align and Style Checkbox */
+.input-group {
+  margin-bottom: 25px;
+  text-align: center; /* Center-align the entire group */
+}
+
+.input-group label {
+  display: inline-block;
+  margin-right: 10px;
+  font-size: 1.1rem; /* Slightly larger label font */
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5); /* Make the checkbox bigger */
+  margin-left: 5px; /* Add spacing between the label and checkbox */
   cursor: pointer;
 }

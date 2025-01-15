@@ -2,191 +2,277 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import "./App.css";
 
-const App = () => {
+function App() {
   const { register, handleSubmit } = useForm();
-  const [autoCoralScores, setAutoCoralScores] = useState([0, 0, 0, 0]);
-  const [teleopCoralScores, setTeleopCoralScores] = useState([0, 0, 0, 0]);
-  const [autoAlgae, setAutoAlgae] = useState(0);
-  const [teleopAlgae, setTeleopAlgae] = useState(0);
-  const [autoShooting, setAutoShooting] = useState(0);
-  const [teleopShooting, setTeleopShooting] = useState(0);
+  
+  // Separate state for Auto and Teleop sections
+  const [autoCoralLevels, setAutoCoralLevels] = useState([0, 0, 0, 0]);
+  const [teleopCoralLevels, setTeleopCoralLevels] = useState([0, 0, 0, 0]);
+  const [algaeProcessedAuto, setAlgaeProcessedAuto] = useState(0);
+  const [algaeProcessedTeleop, setAlgaeProcessedTeleop] = useState(0);
+  const [algaeNettedAuto, setAlgaeNettedAuto] = useState(0);
+  const [algaeNettedTeleop, setAlgaeNettedTeleop] = useState(0);
+  const [algaeInNetAuto, setAlgaeInNetAuto] = useState(0);
+  const [algaeInNetTeleop, setAlgaeInNetTeleop] = useState(0);
 
-  const handleIncrement = (scores, setScores, index) => {
-    const newScores = [...scores];
-    newScores[index]++;
-    setScores(newScores);
+  // Increase value for Auto or Teleop section
+  const increaseValue = (index, type, section) => {
+    if (section === "auto") {
+      if (type === "coral") {
+        const newLevels = [...autoCoralLevels];
+        newLevels[index] += 1;
+        setAutoCoralLevels(newLevels);
+      } else if (type === "algaeProcessed") {
+        setAlgaeProcessedAuto(algaeProcessedAuto + 1);
+      } else if (type === "algaeNetted") {
+        setAlgaeNettedAuto(algaeNettedAuto + 1);
+      } else if (type === "algaeInNet") {
+        setAlgaeInNetAuto(algaeInNetAuto + 1);
+      }
+    } else if (section === "teleop") {
+      if (type === "coral") {
+        const newLevels = [...teleopCoralLevels];
+        newLevels[index] += 1;
+        setTeleopCoralLevels(newLevels);
+      } else if (type === "algaeProcessed") {
+        setAlgaeProcessedTeleop(algaeProcessedTeleop + 1);
+      } else if (type === "algaeNetted") {
+        setAlgaeNettedTeleop(algaeNettedTeleop + 1);
+      } else if (type === "algaeInNet") {
+        setAlgaeInNetTeleop(algaeInNetTeleop + 1);
+      }
+    }
   };
 
-  const handleDecrement = (scores, setScores, index) => {
-    const newScores = [...scores];
-    if (newScores[index] > 0) {
-      newScores[index]--;
+  // Decrease value for Auto or Teleop section
+  const decreaseValue = (index, type, section) => {
+    if (section === "auto") {
+      if (type === "coral" && autoCoralLevels[index] > 0) {
+        const newLevels = [...autoCoralLevels];
+        newLevels[index] -= 1;
+        setAutoCoralLevels(newLevels);
+      } else if (type === "algaeProcessed" && algaeProcessedAuto > 0) {
+        setAlgaeProcessedAuto(algaeProcessedAuto - 1);
+      } else if (type === "algaeNetted" && algaeNettedAuto > 0) {
+        setAlgaeNettedAuto(algaeNettedAuto - 1);
+      } else if (type === "algaeInNet" && algaeInNetAuto > 0) {
+        setAlgaeInNetAuto(algaeInNetAuto - 1);
+      }
+    } else if (section === "teleop") {
+      if (type === "coral" && teleopCoralLevels[index] > 0) {
+        const newLevels = [...teleopCoralLevels];
+        newLevels[index] -= 1;
+        setTeleopCoralLevels(newLevels);
+      } else if (type === "algaeProcessed" && algaeProcessedTeleop > 0) {
+        setAlgaeProcessedTeleop(algaeProcessedTeleop - 1);
+      } else if (type === "algaeNetted" && algaeNettedTeleop > 0) {
+        setAlgaeNettedTeleop(algaeNettedTeleop - 1);
+      } else if (type === "algaeInNet" && algaeInNetTeleop > 0) {
+        setAlgaeInNetTeleop(algaeInNetTeleop - 1);
+      }
     }
-    setScores(newScores);
   };
 
   const onSubmit = (data) => {
-    console.log({
-      ...data,
-      autoCoralScores,
-      teleopCoralScores,
-      autoAlgae,
-      teleopAlgae,
-      autoShooting,
-      teleopShooting,
-    });
+    console.log(data);
   };
 
   return (
-    <div className="app">
-      <h1>Game Scoring App</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <h2>Match Details</h2>
-        <label>
-          Match Number:
+    <div className="App">
+      <form onSubmit={handleSubmit(onSubmit)} className="form-container">
+        <h2 className="header">Scout Match Form</h2>
+
+        {/* Match Details */}
+        <div className="input-group">
+          <label>Match Number:</label>
           <input {...register("matchNumber")} type="number" />
-        </label>
-        <label>
-          Team Number:
+        </div>
+        <div className="input-group">
+          <label>Team Number:</label>
           <input {...register("teamNumber")} type="number" />
-        </label>
+        </div>
 
-        <h2>Auto</h2>
-        <label>
-          <input {...register("auto.leftBlackLine")} type="checkbox" />
-          Left black line
-        </label>
+        {/* Auto Section */}
+        <div className="section">
+          <h3>Autonomous</h3>
+          <div className="input-group">
+            <label>Left Black Line:</label>
+            <input {...register("auto.leftBlackLine")} type="checkbox" />
+          </div>
 
-        <div>
-          <label>Coral scored per level:</label>
+          {/* Coral Scoring */}
+          <h4>Coral Scored per Level:</h4>
           {["Level 1", "Level 2", "Level 3", "Level 4"].map((level, index) => (
-            <div key={index} className="score-control">
+            <div key={index} className="level-control">
               <span>{level}</span>
               <button
                 type="button"
-                onClick={() =>
-                  handleDecrement(autoCoralScores, setAutoCoralScores, index)
-                }
+                className="button-decrease"
+                onClick={() => decreaseValue(index, "coral", "auto")}
               >
                 -
               </button>
-              <span>{autoCoralScores[index]}</span>
+              <input
+                {...register(`auto.coralScored.level${index + 1}`)}
+                value={autoCoralLevels[index]}
+                type="number"
+                readOnly
+                className="level-input"
+              />
               <button
                 type="button"
-                onClick={() =>
-                  handleIncrement(autoCoralScores, setAutoCoralScores, index)
-                }
+                className="button-increase"
+                onClick={() => increaseValue(index, "coral", "auto")}
               >
                 +
               </button>
             </div>
           ))}
-        </div>
 
-        <div>
-          <label>
-            Algae processed:
-            <button type="button" onClick={() => setAutoAlgae(autoAlgae - 1)}>
+          {/* Algae Processed */}
+          <h4>Algae Processed:</h4>
+          <div className="algae-control">
+            <button
+              type="button"
+              className="button-decrease"
+              onClick={() => decreaseValue(null, "algaeProcessed", "auto")}
+            >
               -
             </button>
-            <span>{autoAlgae}</span>
-            <button type="button" onClick={() => setAutoAlgae(autoAlgae + 1)}>
+            <input
+              {...register("auto.algaeProcessed")}
+              value={algaeProcessedAuto}
+              type="number"
+              readOnly
+              className="algae-input"
+            />
+            <button
+              type="button"
+              className="button-increase"
+              onClick={() => increaseValue(null, "algaeProcessed", "auto")}
+            >
               +
             </button>
-          </label>
-        </div>
+          </div>
 
-        <div>
-          <label>
-            Algae shooting:
-            <button type="button" onClick={() => setAutoShooting(autoShooting - 1)}>
+          {/* Algae Netted */}
+          <h4>Algae Netted:</h4>
+          <div className="algae-control">
+            <button
+              type="button"
+              className="button-decrease"
+              onClick={() => decreaseValue(null, "algaeNetted", "auto")}
+            >
               -
             </button>
-            <span>{autoShooting}</span>
-            <button type="button" onClick={() => setAutoShooting(autoShooting + 1)}>
+            <input
+              {...register("auto.algaeNetted")}
+              value={algaeNettedAuto}
+              type="number"
+              readOnly
+              className="algae-input"
+            />
+            <button
+              type="button"
+              className="button-increase"
+              onClick={() => increaseValue(null, "algaeNetted", "auto")}
+            >
               +
             </button>
-          </label>
+          </div>
         </div>
 
-        <h2>Teleop</h2>
-        <div>
-          <label>Coral scored per level:</label>
+        {/* Teleop Section */}
+        <div className="section">
+          <h3>Teleoperated</h3>
+          <h4>Coral Scored per Level:</h4>
           {["Level 1", "Level 2", "Level 3", "Level 4"].map((level, index) => (
-            <div key={index} className="score-control">
+            <div key={index} className="level-control">
               <span>{level}</span>
               <button
                 type="button"
-                onClick={() =>
-                  handleDecrement(teleopCoralScores, setTeleopCoralScores, index)
-                }
+                className="button-decrease"
+                onClick={() => decreaseValue(index, "coral", "teleop")}
               >
                 -
               </button>
-              <span>{teleopCoralScores[index]}</span>
+              <input
+                {...register(`teleop.coralScored.level${index + 1}`)}
+                value={teleopCoralLevels[index]}
+                type="number"
+                readOnly
+                className="level-input"
+              />
               <button
                 type="button"
-                onClick={() =>
-                  handleIncrement(teleopCoralScores, setTeleopCoralScores, index)
-                }
+                className="button-increase"
+                onClick={() => increaseValue(index, "coral", "teleop")}
               >
                 +
               </button>
             </div>
           ))}
-        </div>
 
-        <div>
-          <label>
-            Algae processed:
-            <button type="button" onClick={() => setTeleopAlgae(teleopAlgae - 1)}>
-              -
-            </button>
-            <span>{teleopAlgae}</span>
-            <button type="button" onClick={() => setTeleopAlgae(teleopAlgae + 1)}>
-              +
-            </button>
-          </label>
-        </div>
-
-        <div>
-          <label>
-            Algae shooting:
+          {/* Algae Processed */}
+          <h4>Algae Processed:</h4>
+          <div className="algae-control">
             <button
               type="button"
-              onClick={() => setTeleopShooting(teleopShooting - 1)}
+              className="button-decrease"
+              onClick={() => decreaseValue(null, "algaeProcessed", "teleop")}
             >
               -
             </button>
-            <span>{teleopShooting}</span>
+            <input
+              {...register("teleop.algaeProcessed")}
+              value={algaeProcessedTeleop}
+              type="number"
+              readOnly
+              className="algae-input"
+            />
             <button
               type="button"
-              onClick={() => setTeleopShooting(teleopShooting + 1)}
+              className="button-increase"
+              onClick={() => increaseValue(null, "algaeProcessed", "teleop")}
             >
               +
             </button>
-          </label>
+          </div>
+
+          {/* Algae Netted */}
+          <h4>Algae Netted:</h4>
+          <div className="algae-control">
+            <button
+              type="button"
+              className="button-decrease"
+              onClick={() => decreaseValue(null, "algaeNetted", "teleop")}
+            >
+              -
+            </button>
+            <input
+              {...register("teleop.algaeNetted")}
+              value={algaeNettedTeleop}
+              type="number"
+              readOnly
+              className="algae-input"
+            />
+            <button
+              type="button"
+              className="button-increase"
+              onClick={() => increaseValue(null, "algaeNetted", "teleop")}
+            >
+              +
+            </button>
+          </div>
         </div>
 
-        <h2>Endgame</h2>
-        <label>
-          Cage climb:
-          <select {...register("endgame.cageClimb")}>
-            <option value="shallow">Shallow</option>
-            <option value="deep">Deep</option>
-            <option value="park">Park</option>
-          </select>
-        </label>
-
-        <label>
-          Comments:
-          <textarea {...register("endgame.comments")} placeholder="Type comments here" />
-        </label>
-
-        <button type="submit">Submit</button>
+        {/* Submit Button */}
+        <button type="submit" className="submit-button">
+          Submit
+        </button>
       </form>
     </div>
   );
-};
+}
 
 export default App;
